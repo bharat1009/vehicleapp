@@ -15,8 +15,8 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
 
   void addVehicle() {
     FirebaseFirestore.instance.collection('vehicles').add({
-      'make': makeController.text,
-      'model': modelController.text,
+      'make': makeController.text.toString(),
+      'model': modelController.text.toString(),
       'year': int.parse(yearController.text),
       'fuel Efficiency': double.parse(efficiencyController.text),
     });
@@ -50,7 +50,7 @@ class _AddVehicleScreenState extends State<AddVehicleScreen> {
             SizedBox(height: 10),
             TextField(
               controller: efficiencyController,
-              decoration: InputDecoration(labelText: 'Fuel Efficiency (km/l)', border: OutlineInputBorder()),
+              decoration: InputDecoration(labelText: 'FuelEfficiency (km/l)', border: OutlineInputBorder()),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),

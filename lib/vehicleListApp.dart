@@ -31,9 +31,20 @@ class VehicleListScreen extends StatelessWidget {
         body: StreamBuilder(
           stream: vehicles.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No vehicles found'));
+            }
+
+            var documents = snapshot.data!.docs;
+
             return ListView(
               padding: EdgeInsets.all(10.0),
               children: snapshot.data!.docs.map((document) {
@@ -41,13 +52,13 @@ class VehicleListScreen extends StatelessWidget {
                 return Card(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   elevation: 5,
-                  color: getColor(data['year'], data['fuelEfficiency']),
+                  color: getColor(data['year'], data['fuel Efficiency']),
                   child: ListTile(
                     contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     title: Text("${data['make']} ${data['model']}",
                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     subtitle: Text(
-                      "Year: ${data['year']} - Efficiency: ${data['fuelEfficiency']} km/l",
+                      "Year: ${data['year']} - Efficiency: ${data['fuel Efficiency']} km/l",
                       style: TextStyle(fontSize: 14, color: Colors.black87),
                     ),
                     leading: Icon(Icons.directions_car, color: Colors.white, size: 30),
